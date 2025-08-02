@@ -51,25 +51,32 @@ export const SIZE_RECOMMENDATIONS = {
 // Foundation options
 export const FOUNDATION_OPTIONS = [
   {
-    id: 'markplatta',
-    name: 'Markplatta (Ground Slab)',
+    id: 'marksten',
+    name: 'Marksten (paving stone)',
     description: 'Betongplattor direkt på marken',
     pros: ['Stabil grund', 'Lång hållbarhet', 'Bra för alla storlekar'],
-    cons: ['Dyrare', 'Kräver grävning', 'Lång installationstid'],
+    cons: ['Kan vara svåra att få raka', 'Tjäle kan vara problem'],
     materials: [
-      'Betong C25 (0.15m³/m²)',
-      'Armeringsnät (150x150mm)',
-      'Isolering EPS 100mm',
-      'Damp PE-folie 0.2mm',
-      'Grusskikt 0-32mm (200mm)'
+      '1 platta i varje hörn och mitt under var 3:e',
     ],
-    costPerM2: 1500,
+    costPerM2: 315,
   },
   {
-    id: 'plint',
+    id: 'plint 300',
     name: 'Plint (Concrete Piers)',
     description: 'Betongplintar som bär upp konstruktionen',
-    pros: ['Kostnadseffektiv', 'Snabb installation', 'Bra ventilation'],
+    pros: ['Distans från mark', 'Snabb installation', 'Justerbart järn'],
+    cons: ['Mindre stabil', 'Kräver frostfri djup', 'Begränsad belastning'],
+    materials: [
+      'Betongplintar 30x30x30cm'
+    ],
+    costPerM2: 800,
+  },
+  {
+    id: 'plint 500',
+    name: 'Plint (Concrete Piers)',
+    description: 'Betongplintar som bär upp konstruktionen',
+    pros: ['Distans från mark', 'Snabb installation', 'Justerbart järn'],
     cons: ['Mindre stabil', 'Kräver frostfri djup', 'Begränsad belastning'],
     materials: [
       'Betongplintar 40x40cm',
@@ -79,7 +86,21 @@ export const FOUNDATION_OPTIONS = [
       'Behandlingsmedel för trä'
     ],
     costPerM2: 800,
-    installationTime: '2-3 dagar'
+  },
+  {
+    id: 'plint 700',
+    name: 'Plint (Concrete Piers)',
+    description: 'Betongplintar som bär upp konstruktionen',
+    pros: ['Distans från mark', 'Snabb installation', 'Justerbart järn'],
+    cons: ['Mindre stabil', 'Kräver frostfri djup', 'Begränsad belastning'],
+    materials: [
+      'Betongplintar 40x40cm',
+      'Träpelare impregnerade 95x95mm',
+      'Stålbeslag för pelare',
+      'Skruvar och muttrar M12',
+      'Behandlingsmedel för trä'
+    ],
+    costPerM2: 800,
   }
 ];
 
