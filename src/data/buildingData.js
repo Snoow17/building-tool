@@ -63,8 +63,7 @@ export const FOUNDATION_OPTIONS = [
       'Damp PE-folie 0.2mm',
       'Grusskikt 0-32mm (200mm)'
     ],
-    costPerM2: 1200,
-    installationTime: '3-5 dagar'
+    costPerM2: 1500,
   },
   {
     id: 'plint',

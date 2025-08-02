@@ -53,10 +53,6 @@ const FoundationSelector = ({
                 <span className="stat-label">Kostnad per m²:</span>
                 <span className="stat-value">{foundation.costPerM2} SEK</span>
               </div>
-              <div className="stat">
-                <span className="stat-label">Installationstid:</span>
-                <span className="stat-value">{foundation.installationTime}</span>
-              </div>
             </div>
           </div>
         ))}
