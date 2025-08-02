@@ -1,161 +1,165 @@
 import React, { useState } from 'react';
 import './App.css';
 
+// Import components
+import ProjectSelector from './components/ProjectSelector';
+import SizeSelector from './components/SizeSelector';
+import FoundationSelector from './components/FoundationSelector';
+import JointsSelector from './components/JointsSelector';
+import FloorboardsSelector from './components/FloorboardsSelector';
+import MaterialsSummary from './components/MaterialsSummary';
+
+// Import data
+import {
+  BUILDING_PROJECTS,
+  SIZE_RECOMMENDATIONS,
+  FOUNDATION_OPTIONS,
+  JOINT_OPTIONS,
+  FLOORBOARD_OPTIONS
+} from './data/buildingData';
+
+// Main App component
 function App() {
+  const [currentStep, setCurrentStep] = useState('project-selection');
   const [selectedProject, setSelectedProject] = useState('');
-  const [projectDetails, setProjectDetails] = useState(null);
+  const [projectSize, setProjectSize] = useState({ width: '', length: '' });
+  const [selectedFoundation, setSelectedFoundation] = useState('');
+  const [selectedJoints, setSelectedJoints] = useState('');
+  const [selectedFloorboards, setSelectedFloorboards] = useState('');
 
-  const buildingProjects = [
-    {
-      id: 'porch',
-      name: 'Veranda (Porch)',
-      description: 'En vacker veranda för att njuta av utomhuslivet',
-      materials: ['Trä', 'Betong', 'Takpannor', 'Räcken'],
-      estimatedTime: '2-4 veckor',
-      difficulty: 'Medel'
-    },
-    {
-      id: 'wall',
-      name: 'Vägg (Wall)',
-      description: 'Solid vägg för att skapa rum och struktur',
-      materials: ['Tegel', 'Cement', 'Isolering', 'Gips'],
-      estimatedTime: '1-2 veckor',
-      difficulty: 'Enkel'
-    },
-    {
-      id: 'roof',
-      name: 'Tak (Roof)',
-      description: 'Skyddande tak för att skydda mot väder och vind',
-      materials: ['Takpannor', 'Trä', 'Isolering', 'Vattenavledning'],
-      estimatedTime: '3-5 veckor',
-      difficulty: 'Avancerad'
-    },
-    {
-      id: 'deck',
-      name: 'Terrass (Deck)',
-      description: 'Träterrass för utomhusaktivitet och avkoppling',
-      materials: ['Trä', 'Skruvar', 'Behandlingsmedel', 'Grund'],
-      estimatedTime: '1-3 veckor',
-      difficulty: 'Medel'
-    },
-    {
-      id: 'shed',
-      name: 'Förråd (Shed)',
-      description: 'Praktiskt förråd för verktyg och lagring',
-      materials: ['Trä', 'Takpannor', 'Dörr', 'Fönster'],
-      estimatedTime: '2-3 veckor',
-      difficulty: 'Medel'
-    },
-    {
-      id: 'fence',
-      name: 'Staket (Fence)',
-      description: 'Staket för att avgränsa tomten och skapa privatliv',
-      materials: ['Trä', 'Metall', 'Cement', 'Skruvar'],
-      estimatedTime: '1-2 veckor',
-      difficulty: 'Enkel'
-    },
-    {
-      id: 'garage',
-      name: 'Garage (Garage)',
-      description: 'Garage för att skydda fordon och lagra verktyg',
-      materials: ['Betong', 'Tegel', 'Port', 'Isolering'],
-      estimatedTime: '4-6 veckor',
-      difficulty: 'Avancerad'
-    },
-    {
-      id: 'garden-house',
-      name: 'Trädgårdshus (Garden House)',
-      description: 'Charmigt trädgårdshus för sommarkvällar',
-      materials: ['Trä', 'Glas', 'Takpannor', 'Isolering'],
-      estimatedTime: '3-4 veckor',
-      difficulty: 'Avancerad'
-    }
-  ];
-
+  // Event handlers
   const handleProjectSelect = (projectId) => {
     setSelectedProject(projectId);
-    const project = buildingProjects.find(p => p.id === projectId);
-    setProjectDetails(project);
+    setCurrentStep('size-selection');
+  };
+
+  const handleSizeSubmit = () => {
+    if (projectSize.width && projectSize.length) {
+      setCurrentStep('foundation-selection');
+    }
+  };
+
+  const handleFoundationSelect = (foundationId) => {
+    setSelectedFoundation(foundationId);
+    setCurrentStep('joints-selection');
+  };
+
+  const handleJointsSelect = (jointsId) => {
+    setSelectedJoints(jointsId);
+    setCurrentStep('floorboards-selection');
+  };
+
+  const handleFloorboardsSelect = (floorboardsId) => {
+    setSelectedFloorboards(floorboardsId);
+    setCurrentStep('materials-summary');
+  };
+
+  const handleBackToProjects = () => {
+    setCurrentStep('project-selection');
+    setSelectedProject('');
+    setProjectSize({ width: '', length: '' });
+    setSelectedFoundation('');
+    setSelectedJoints('');
+    setSelectedFloorboards('');
+  };
+
+  const handleBackToSize = () => setCurrentStep('size-selection');
+  const handleBackToFoundation = () => setCurrentStep('foundation-selection');
+  const handleBackToJoints = () => setCurrentStep('joints-selection');
+  const handleBackToFloorboards = () => setCurrentStep('floorboards-selection');
+
+  // Render current step
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case 'project-selection':
+        return (
+          <>
+            <ProjectSelector 
+              selectedProject={selectedProject}
+              onProjectSelect={handleProjectSelect}
+              buildingProjects={BUILDING_PROJECTS}
+            />
+            {!selectedProject && (
+              <div className="welcome-message">
+                <p>Välj ett byggprojekt för att komma igång</p>
+              </div>
+            )}
+          </>
+        );
+
+      case 'size-selection':
+        return (
+          <SizeSelector
+            selectedProject={selectedProject}
+            projectSize={projectSize}
+            onSizeChange={setProjectSize}
+            onSizeSubmit={handleSizeSubmit}
+            onBack={handleBackToProjects}
+            sizeRecommendations={SIZE_RECOMMENDATIONS}
+            buildingProjects={BUILDING_PROJECTS}
+          />
+        );
+
+      case 'foundation-selection':
+        return (
+          <FoundationSelector
+            selectedProject={selectedProject}
+            onFoundationSelect={handleFoundationSelect}
+            onBack={handleBackToSize}
+            foundationOptions={FOUNDATION_OPTIONS}
+            buildingProjects={BUILDING_PROJECTS}
+          />
+        );
+
+      case 'joints-selection':
+        return (
+          <JointsSelector
+            selectedProject={selectedProject}
+            onJointsSelect={handleJointsSelect}
+            onBack={handleBackToFoundation}
+            jointOptions={JOINT_OPTIONS}
+            buildingProjects={BUILDING_PROJECTS}
+          />
+        );
+
+      case 'floorboards-selection':
+        return (
+          <FloorboardsSelector
+            selectedProject={selectedProject}
+            onFloorboardsSelect={handleFloorboardsSelect}
+            onBack={handleBackToJoints}
+            floorboardOptions={FLOORBOARD_OPTIONS}
+            buildingProjects={BUILDING_PROJECTS}
+          />
+        );
+
+      case 'materials-summary':
+        return (
+          <MaterialsSummary
+            selectedProject={selectedProject}
+            projectSize={projectSize}
+            selectedFoundation={selectedFoundation}
+            selectedJoints={selectedJoints}
+            selectedFloorboards={selectedFloorboards}
+            onBack={handleBackToFloorboards}
+            buildingProjects={BUILDING_PROJECTS}
+            foundationOptions={FOUNDATION_OPTIONS}
+            jointOptions={JOINT_OPTIONS}
+            floorboardOptions={FLOORBOARD_OPTIONS}
+          />
+        );
+
+      default:
+        return null;
+    }
   };
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>🏗️ Byggverktyg (Building Tool)</h1>
-        <p>Välj ditt byggprojekt och få hjälp med planering</p>
-      </header>
-      
-      <main className="App-main">
-        <div className="project-selector">
-          <label htmlFor="project-dropdown">Välj byggprojekt:</label>
-          <select 
-            id="project-dropdown"
-            value={selectedProject}
-            onChange={(e) => handleProjectSelect(e.target.value)}
-            className="project-dropdown"
-          >
-            <option value="">-- Välj ett projekt --</option>
-            {buildingProjects.map(project => (
-              <option key={project.id} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {projectDetails && (
-          <div className="project-details">
-            <h2>{projectDetails.name}</h2>
-            <p className="project-description">{projectDetails.description}</p>
-            
-            <div className="project-info-grid">
-              <div className="info-card">
-                <h3>Material som behövs:</h3>
-                <ul>
-                  {projectDetails.materials.map((material, index) => (
-                    <li key={index}>{material}</li>
-                  ))}
-                </ul>
-              </div>
-              
-              <div className="info-card">
-                <h3>Uppskattad tid:</h3>
-                <p className="time-estimate">{projectDetails.estimatedTime}</p>
-              </div>
-              
-              <div className="info-card">
-                <h3>Svårighetsgrad:</h3>
-                <p className={`difficulty ${projectDetails.difficulty.toLowerCase()}`}>
-                  {projectDetails.difficulty}
-                </p>
-              </div>
-            </div>
-
-            <div className="action-buttons">
-              <button className="btn btn-primary">Spara projekt</button>
-              <button className="btn btn-secondary">Skriv ut plan</button>
-              <button className="btn btn-info">Få offert</button>
-            </div>
-          </div>
-        )}
-
-        {!selectedProject && (
-          <div className="welcome-message">
-            <h2>Välkommen till Byggverktyget!</h2>
-            <p>Välj ett byggprojekt från menyn ovan för att komma igång med din planering.</p>
-            <div className="feature-list">
-              <h3>Vad kan du göra här:</h3>
-              <ul>
-                <li>✅ Välja mellan populära svenska byggprojekt</li>
-                <li>📋 Se materiallista för varje projekt</li>
-                <li>⏱️ Få uppskattad byggtid</li>
-                <li>📊 Se svårighetsgrad för projektet</li>
-                <li>💾 Spara dina projekt för senare</li>
-              </ul>
-            </div>
-          </div>
-        )}
-      </main>
+      <div className="container">
+        <h1 className="title">Byggverktyg (Building Tool)</h1>
+        {renderCurrentStep()}
+      </div>
     </div>
   );
 }
