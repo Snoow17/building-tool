@@ -5,8 +5,7 @@ const MaterialsSummary = ({
   projectSize, 
   selectedFoundation, 
   selectedJoints, 
-  selectedFloorboards, 
-  onBack,
+  selectedFloorboards,
   buildingProjects,
   foundationOptions,
   jointOptions,
@@ -28,9 +27,6 @@ const MaterialsSummary = ({
   return (
     <div className="materials-summary">
       <div className="step-header">
-        <button className="back-button" onClick={onBack}>
-          ← Tillbaka till brädval
-        </button>
         <h2>Materiallista för din {project.name}</h2>
         <p>Komplett lista över allt du behöver</p>
       </div>

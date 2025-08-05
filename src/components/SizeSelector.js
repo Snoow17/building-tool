@@ -4,8 +4,7 @@ const SizeSelector = ({
   selectedProject, 
   projectSize, 
   onSizeChange, 
-  onSizeSubmit, 
-  onBack,
+  onSizeSubmit,
   sizeRecommendations,
   buildingProjects
 }) => {
@@ -17,9 +16,6 @@ const SizeSelector = ({
   return (
     <div className="size-selection">
       <div className="step-header">
-        <button className="back-button" onClick={onBack}>
-          ← Tillbaka till projekt
-        </button>
         <h2>Välj storlek för din {project.name}</h2>
         <p>
           Rekommenderade storlekar: {recommendations.minWidth}-{recommendations.maxWidth}m bredd, 

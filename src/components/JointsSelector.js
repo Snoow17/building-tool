@@ -2,8 +2,7 @@ import React from 'react';
 
 const JointsSelector = ({ 
   selectedProject, 
-  onJointsSelect, 
-  onBack,
+  onJointsSelect,
   jointOptions,
   buildingProjects
 }) => {
@@ -12,9 +11,6 @@ const JointsSelector = ({
   return (
     <div className="joints-selection">
       <div className="step-header">
-        <button className="back-button" onClick={onBack}>
-          ← Tillbaka till grundval
-        </button>
         <h2>Välj balkar för din {project.name}</h2>
         <p>Välj balkstorlek baserat på ditt projekt</p>
       </div>

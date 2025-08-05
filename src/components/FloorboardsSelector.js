@@ -2,8 +2,7 @@ import React from 'react';
 
 const FloorboardsSelector = ({ 
   selectedProject, 
-  onFloorboardsSelect, 
-  onBack,
+  onFloorboardsSelect,
   floorboardOptions,
   buildingProjects
 }) => {
@@ -12,9 +11,6 @@ const FloorboardsSelector = ({
   return (
     <div className="floorboards-selection">
       <div className="step-header">
-        <button className="back-button" onClick={onBack}>
-          ← Tillbaka till balkval
-        </button>
         <h2>Välj golvbrädor för din {project.name}</h2>
         <p>Välj brädstorlek och material</p>
       </div>

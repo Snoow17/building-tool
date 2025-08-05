@@ -2,8 +2,7 @@ import React from 'react';
 
 const FoundationSelector = ({ 
   selectedProject, 
-  onFoundationSelect, 
-  onBack,
+  onFoundationSelect,
   foundationOptions,
   buildingProjects
 }) => {
@@ -12,9 +11,6 @@ const FoundationSelector = ({
   return (
     <div className="foundation-selection">
       <div className="step-header">
-        <button className="back-button" onClick={onBack}>
-          ← Tillbaka till storlek
-        </button>
         <h2>Välj grund för din {project.name}</h2>
         <p>Välj den typ av grund som passar bäst för ditt projekt</p>
       </div>

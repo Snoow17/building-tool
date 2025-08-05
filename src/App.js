@@ -68,6 +68,24 @@ function App() {
   const handleBackToJoints = () => setCurrentStep('joints-selection');
   const handleBackToFloorboards = () => setCurrentStep('floorboards-selection');
 
+  // Get the appropriate back handler for current step
+  const getBackHandler = () => {
+    switch (currentStep) {
+      case 'size-selection':
+        return handleBackToProjects;
+      case 'foundation-selection':
+        return handleBackToSize;
+      case 'joints-selection':
+        return handleBackToFoundation;
+      case 'floorboards-selection':
+        return handleBackToJoints;
+      case 'materials-summary':
+        return handleBackToFloorboards;
+      default:
+        return null;
+    }
+  };
+
   // Render current step
   const renderCurrentStep = () => {
     switch (currentStep) {
@@ -94,7 +112,6 @@ function App() {
             projectSize={projectSize}
             onSizeChange={setProjectSize}
             onSizeSubmit={handleSizeSubmit}
-            onBack={handleBackToProjects}
             sizeRecommendations={SIZE_RECOMMENDATIONS}
             buildingProjects={BUILDING_PROJECTS}
           />
@@ -105,7 +122,6 @@ function App() {
           <FoundationSelector
             selectedProject={selectedProject}
             onFoundationSelect={handleFoundationSelect}
-            onBack={handleBackToSize}
             foundationOptions={FOUNDATION_OPTIONS}
             buildingProjects={BUILDING_PROJECTS}
           />
@@ -116,7 +132,6 @@ function App() {
           <JointsSelector
             selectedProject={selectedProject}
             onJointsSelect={handleJointsSelect}
-            onBack={handleBackToFoundation}
             jointOptions={JOINT_OPTIONS}
             buildingProjects={BUILDING_PROJECTS}
           />
@@ -127,7 +142,6 @@ function App() {
           <FloorboardsSelector
             selectedProject={selectedProject}
             onFloorboardsSelect={handleFloorboardsSelect}
-            onBack={handleBackToJoints}
             floorboardOptions={FLOORBOARD_OPTIONS}
             buildingProjects={BUILDING_PROJECTS}
           />
@@ -141,7 +155,6 @@ function App() {
             selectedFoundation={selectedFoundation}
             selectedJoints={selectedJoints}
             selectedFloorboards={selectedFloorboards}
-            onBack={handleBackToFloorboards}
             buildingProjects={BUILDING_PROJECTS}
             foundationOptions={FOUNDATION_OPTIONS}
             jointOptions={JOINT_OPTIONS}
@@ -154,8 +167,17 @@ function App() {
     }
   };
 
+  const backHandler = getBackHandler();
+
   return (
     <div className="App">
+      {/* Back button rendered at app level - only show when not on first step */}
+      {backHandler && (
+        <button className="back-button" onClick={backHandler}>
+          ← Tillbaka
+        </button>
+      )}
+      
       <div className="container">
         <h1 className="title">Byggverktyg (Building Tool)</h1>
         {renderCurrentStep()}
