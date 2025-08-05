@@ -147,6 +147,7 @@ export const FLOORBOARD_OPTIONS = [
     material: 'Impregnerad furu',
     spacing: '5mm',
     costPerM2: 180,
+    metersPerM2: 10.5,
     suitableFor: 'Mindre projekt, klassisk stil'
   },
   {
@@ -156,6 +157,7 @@ export const FLOORBOARD_OPTIONS = [
     material: 'Impregnerad furu',
     spacing: '5mm',
     costPerM2: 220,
+    metersPerM2: 8.33,
     suitableFor: 'De flesta verandor och terrasser'
   },
   {
@@ -165,6 +167,7 @@ export const FLOORBOARD_OPTIONS = [
     material: 'Impregnerad furu',
     spacing: '5mm',
     costPerM2: 260,
+    metersPerM2: 6.7,
     suitableFor: 'Stora projekt, modern stil'
   },
   {
@@ -174,6 +177,7 @@ export const FLOORBOARD_OPTIONS = [
     material: 'Impregnerad furu',
     spacing: '5mm',
     costPerM2: 320,
+    metersPerM2: 6.7,
     suitableFor: 'Högbelastade ytor, lång hållbarhet'
   }
 ]; 

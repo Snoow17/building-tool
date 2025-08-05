@@ -35,6 +35,10 @@ const FloorboardsSelector = ({
                 <span className="spec-value">{floorboard.spacing}</span>
               </div>
               <div className="spec">
+                <span className="spec-label">Meter per m²</span>
+                <span className="spec-value">{floorboard.metersPerM2}</span>
+              </div>
+              <div className="spec">
                 <span className="spec-label">Kostnad per m²:</span>
                 <span className="spec-value">{floorboard.costPerM2} SEK</span>
               </div>

@@ -375,6 +375,46 @@ body {
   margin-bottom: 1.5rem;
 }
 
+/* Floorboard calculation */
+.floorboard-calculation {
+  margin-bottom: 1rem;
+}
+
+.calculation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.calc-item {
+  background-color: #333333;
+  border: 1px solid #555555;
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calc-item.highlight {
+  background-color: #1e40af;
+  border-color: #3b82f6;
+}
+
+.calc-label {
+  font-weight: 600;
+  color: #cccccc;
+}
+
+.calc-item.highlight .calc-label {
+  color: #ffffff;
+}
+
+.calc-value {
+  font-weight: 600;
+  color: #ffffff;
+}
+
 /* Materials summary */
 .materials-summary {
   width: 100%;

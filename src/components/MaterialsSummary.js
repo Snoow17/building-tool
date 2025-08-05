@@ -1,126 +1,141 @@
 import React from 'react';
 
-const MaterialsSummary = ({ 
-  selectedProject, 
-  projectSize, 
-  selectedFoundation, 
-  selectedJoints, 
+function MaterialsSummary({
+  selectedProject,
+  projectSize,
+  selectedFoundation,
+  selectedJoints,
   selectedFloorboards,
   buildingProjects,
   foundationOptions,
   jointOptions,
   floorboardOptions
-}) => {
+}) {
+  // Get selected options
   const project = buildingProjects.find(p => p.id === selectedProject);
   const foundation = foundationOptions.find(f => f.id === selectedFoundation);
   const joints = jointOptions.find(j => j.id === selectedJoints);
   const floorboards = floorboardOptions.find(f => f.id === selectedFloorboards);
+
+  // Calculate areas and quantities
+  const totalArea = parseFloat(projectSize.width) * parseFloat(projectSize.length);
+  const totalFloorboardMeters = floorboards ? (totalArea * floorboards.metersPerM2) : 0;
   
-  const area = (parseFloat(projectSize.width) * parseFloat(projectSize.length)).toFixed(2);
-  const perimeter = (parseFloat(projectSize.width) + parseFloat(projectSize.length)) * 2;
-  
-  const foundationCost = foundation.costPerM2 * parseFloat(area);
-  const jointsCost = joints.costPerMeter * perimeter;
-  const floorboardsCost = floorboards.costPerM2 * parseFloat(area);
-  const totalCost = Math.round(foundationCost + jointsCost + floorboardsCost);
+  // Calculate costs
+  const foundationCost = foundation ? foundation.costPerM2 * totalArea : 0;
+  const floorboardCost = floorboards ? floorboards.costPerM2 * totalArea : 0;
+  const totalCost = foundationCost + floorboardCost;
 
   return (
     <div className="materials-summary">
       <div className="step-header">
-        <h2>Materiallista för din {project.name}</h2>
-        <p>Komplett lista över allt du behöver</p>
+        <h2>Materialsammanfattning</h2>
+        <p>Översikt av ditt {project?.name.toLowerCase()} projekt</p>
       </div>
 
       <div className="summary-container">
+        {/* Project Overview */}
         <div className="project-overview">
           <h3>Projektöversikt</h3>
           <div className="overview-grid">
             <div className="overview-item">
               <span className="overview-label">Projekt:</span>
-              <span className="overview-value">{project.name}</span>
+              <span className="overview-value">{project?.name}</span>
             </div>
             <div className="overview-item">
               <span className="overview-label">Storlek:</span>
-              <span className="overview-value">{projectSize.width}m × {projectSize.length}m</span>
+              <span className="overview-value">{projectSize.width} × {projectSize.length} m</span>
             </div>
             <div className="overview-item">
-              <span className="overview-label">Area:</span>
-              <span className="overview-value">{area} m²</span>
-            </div>
-            <div className="overview-item">
-              <span className="overview-label">Omkrets:</span>
-              <span className="overview-value">{perimeter.toFixed(2)}m</span>
-            </div>
-            <div className="overview-item">
-              <span className="overview-label">Grund:</span>
-              <span className="overview-value">{foundation.name}</span>
-            </div>
-            <div className="overview-item">
-              <span className="overview-label">Balkar:</span>
-              <span className="overview-value">{joints.name}</span>
-            </div>
-            <div className="overview-item">
-              <span className="overview-label">Golvbrädor:</span>
-              <span className="overview-value">{floorboards.name}</span>
+              <span className="overview-label">Total yta:</span>
+              <span className="overview-value">{totalArea.toFixed(1)} m²</span>
             </div>
             <div className="overview-item total-cost">
               <span className="overview-label">Total kostnad:</span>
-              <span className="overview-value">{totalCost.toLocaleString()} SEK</span>
+              <span className="overview-value">{totalCost.toFixed(0)} kr</span>
             </div>
           </div>
         </div>
 
+        {/* Floorboard Calculation */}
+        {floorboards && (
+          <div className="materials-section">
+            <h4>Golvbrädor - {floorboards.name}</h4>
+            <div className="floorboard-calculation">
+              <div className="calculation-grid">
+                <div className="calc-item">
+                  <span className="calc-label">Total yta:</span>
+                  <span className="calc-value">{totalArea.toFixed(1)} m²</span>
+                </div>
+                <div className="calc-item">
+                  <span className="calc-label">Meter per m²:</span>
+                  <span className="calc-value">{floorboards.metersPerM2} m</span>
+                </div>
+                <div className="calc-item highlight">
+                  <span className="calc-label">Totalt behov:</span>
+                  <span className="calc-value">{totalFloorboardMeters.toFixed(1)} meter</span>
+                </div>
+                <div className="calc-item">
+                  <span className="calc-label">Kostnad:</span>
+                  <span className="calc-value">{floorboardCost.toFixed(0)} kr</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Materials List */}
         <div className="materials-list">
-          <h3>Material som behövs</h3>
+          <h3>Materiallista</h3>
           
-          <div className="materials-section">
-            <h4>Grundmaterial ({foundation.name})</h4>
-            <ul>
-              {foundation.materials.map((material, index) => (
-                <li key={index}>{material}</li>
-              ))}
-            </ul>
-          </div>
+          {foundation && (
+            <div className="materials-section">
+              <h4>Grund - {foundation.name}</h4>
+              <ul>
+                {foundation.materials.map((material, index) => (
+                  <li key={index}>{material}</li>
+                ))}
+                <li><strong>Kostnad: {foundationCost.toFixed(0)} kr</strong></li>
+              </ul>
+            </div>
+          )}
 
-          <div className="materials-section">
-            <h4>Balkar ({joints.name})</h4>
-            <ul>
-              <li>Träbalkar {joints.name} - {perimeter.toFixed(2)}m totalt</li>
-              <li>Skruvar och muttrar för balkar</li>
-              <li>Behandlingsmedel för trä</li>
-            </ul>
-          </div>
+          {joints && (
+            <div className="materials-section">
+              <h4>Balkar - {joints.name}</h4>
+              <ul>
+                <li>Dimension: {joints.name}</li>
+                <li>Hållfasthet: {joints.strength}</li>
+                <li>C/C avstånd: {joints.spacing}</li>
+                <li>Max spännvidd: {joints.maxSpan}m</li>
+              </ul>
+            </div>
+          )}
 
-          <div className="materials-section">
-            <h4>Golvbrädor ({floorboards.name})</h4>
-            <ul>
-              <li>Golvbrädor {floorboards.name} - {area} m²</li>
-              <li>Skruvar för golvbrädor</li>
-              <li>Behandlingsmedel för trä</li>
-            </ul>
-          </div>
-
-          <div className="materials-section">
-            <h4>Verktyg och tillbehör</h4>
-            <ul>
-              <li>Skruvmejsel</li>
-              <li>Borrmaskin</li>
-              <li>Måttband</li>
-              <li>Vattenpass</li>
-              <li>Skyddsutrustning</li>
-            </ul>
-          </div>
+          {floorboards && (
+            <div className="materials-section">
+              <h4>Golvbrädor - {floorboards.name}</h4>
+              <ul>
+                <li>Material: {floorboards.material}</li>
+                <li>Avstånd mellan brädor: {floorboards.spacing}</li>
+                <li><strong>Behövs totalt: {totalFloorboardMeters.toFixed(1)} meter</strong></li>
+                <li><strong>Kostnad: {floorboardCost.toFixed(0)} kr</strong></li>
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className="action-buttons">
-          <button className="btn btn-primary">Spara projekt</button>
-          <button className="btn btn-secondary">Skriv ut materiallista</button>
-          <button className="btn btn-info">Få offert</button>
-          <button className="btn btn-success">Börja bygga</button>
+          <button className="btn btn-info">
+            Exportera till PDF
+          </button>
+          <button className="btn btn-success">
+            Skicka till leverantör
+          </button>
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default MaterialsSummary; 
+export default MaterialsSummary;
