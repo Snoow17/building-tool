@@ -24,6 +24,7 @@ const FoundationSelector = ({
           >
             <h3>{foundation.name}</h3>
             <p className="description">{foundation.description}</p>
+            <p className="description">{foundation.description2}</p>
             
             <div className="pros-cons">
               <div className="pros">
@@ -46,8 +47,8 @@ const FoundationSelector = ({
             
             <div className="option-stats">
               <div className="stat">
-                <span className="stat-label">Kostnad per m²:</span>
-                <span className="stat-value">{foundation.costPerM2} SEK</span>
+                <span className="stat-label">Kostnad per styck:</span>
+                <span className="stat-value">{foundation.costPerSt} SEK</span>
               </div>
             </div>
           </div>

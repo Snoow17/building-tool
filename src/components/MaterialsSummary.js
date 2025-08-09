@@ -22,7 +22,7 @@ function MaterialsSummary({
   const totalFloorboardMeters = floorboards ? (totalArea * floorboards.metersPerM2) : 0;
   
   // Calculate costs
-  const foundationCost = foundation ? foundation.costPerM2 * totalArea : 0;
+  const foundationCost = foundation ? foundation.costPerSt * totalArea : 0;
   const floorboardCost = floorboards ? floorboards.costPerM2 * totalArea : 0;
   const totalCost = foundationCost + floorboardCost;
 
@@ -95,7 +95,6 @@ function MaterialsSummary({
                 {foundation.materials.map((material, index) => (
                   <li key={index}>{material}</li>
                 ))}
-                <li><strong>Kostnad: {foundationCost.toFixed(0)} kr</strong></li>
               </ul>
             </div>
           )}

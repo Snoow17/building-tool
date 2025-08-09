@@ -54,53 +54,49 @@ export const FOUNDATION_OPTIONS = [
     id: 'marksten',
     name: 'Marksten (paving stone)',
     description: 'Betongplattor direkt på marken',
+    description2: 'Rekommendation är 1 i varje hörn och var annan eller 3:e under',
     pros: ['Stabil grund', 'Lång hållbarhet', 'Bra för alla storlekar'],
     cons: ['Kan vara svåra att få raka', 'Tjäle kan vara problem'],
     materials: [
-      '1 platta i varje hörn och mitt under var 3:e',
+      '1 platta i varje hörn och mitt under var annan eller var 3:e',
     ],
-    costPerM2: 315,
+    costPerSt: 35,
   },
   {
     id: 'plint 300',
-    name: 'Plint (Concrete Piers)',
+    name: 'Plint 300 (Concrete Piers)',
     description: 'Betongplintar som bär upp konstruktionen',
+    description2: '1,5 - 2m mellanrum',
     pros: ['Distans från mark', 'Snabb installation', 'Justerbart järn'],
-    cons: ['Mindre stabil', 'Kräver frostfri djup', 'Begränsad belastning'],
+    cons: ['Kräver frostfri djup', 'Begränsad belastning'],
     materials: [
-      'Betongplintar 30x30x30cm'
+      'Räkna 1 i varje hörn och 1,5-2m mellan varje plint.'
     ],
-    costPerM2: 800,
+    costPerSt: 800,
   },
   {
     id: 'plint 500',
-    name: 'Plint (Concrete Piers)',
+    name: 'Plint 500 (Concrete Piers)',
     description: 'Betongplintar som bär upp konstruktionen',
+    description2: '1,5 - 2m mellanrum',
     pros: ['Distans från mark', 'Snabb installation', 'Justerbart järn'],
-    cons: ['Mindre stabil', 'Kräver frostfri djup', 'Begränsad belastning'],
+    cons: ['Kräver frostfri djup', 'Begränsad belastning'],
     materials: [
-      'Betongplintar 40x40cm',
-      'Träpelare impregnerade 95x95mm',
-      'Stålbeslag för pelare',
-      'Skruvar och muttrar M12',
-      'Behandlingsmedel för trä'
+      'Räkna 1 i varje hörn och 1,5-2m mellan varje plint.',
     ],
-    costPerM2: 800,
+    costPerSt: 800,
   },
   {
     id: 'plint 700',
-    name: 'Plint (Concrete Piers)',
+    name: 'Plint 700 (Concrete Piers)',
     description: 'Betongplintar som bär upp konstruktionen',
+    description2: '1,5 - 2m mellanrum',
     pros: ['Distans från mark', 'Snabb installation', 'Justerbart järn'],
-    cons: ['Mindre stabil', 'Kräver frostfri djup', 'Begränsad belastning'],
+    cons: ['Kräver frostfri djup', 'Begränsad belastning'],
     materials: [
-      'Betongplintar 40x40cm',
-      'Träpelare impregnerade 95x95mm',
-      'Stålbeslag för pelare',
-      'Skruvar och muttrar M12',
-      'Behandlingsmedel för trä'
+      'Räkna 1 i varje hörn och 1,5-2m mellan varje plint.',
     ],
-    costPerM2: 800,
+    costPerSt: 800,
   }
 ];
 
