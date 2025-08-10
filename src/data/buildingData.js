@@ -1,16 +1,6 @@
 // Building projects data
 export const BUILDING_PROJECTS = [
   { 
-    id: 'veranda', 
-    name: 'Veranda (Porch)',
-    description: 'En vacker veranda för att njuta av utomhuslivet'
-  },
-  { 
-    id: 'terrass', 
-    name: 'Terrass (Deck)',
-    description: 'Träterrass för utomhusaktivitet och avkoppling'
-  },
-  { 
     id: 'altan', 
     name: 'Altan (Balcony)',
     description: 'Upphöjd altan med räcken'
@@ -19,24 +9,6 @@ export const BUILDING_PROJECTS = [
 
 // Size recommendations for each project type
 export const SIZE_RECOMMENDATIONS = {
-  veranda: {
-    minWidth: 2.4,
-    maxWidth: 6.0,
-    minLength: 3.0,
-    maxLength: 8.0,
-    defaultWidth: 3.0,
-    defaultLength: 4.0,
-    unit: 'meter'
-  },
-  terrass: {
-    minWidth: 2.0,
-    maxWidth: 8.0,
-    minLength: 2.0,
-    maxLength: 12.0,
-    defaultWidth: 3.0,
-    defaultLength: 4.0,
-    unit: 'meter'
-  },
   altan: {
     minWidth: 1.5,
     maxWidth: 4.0,
