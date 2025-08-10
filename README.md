@@ -1,3 +1,9 @@
+Project idea is to make a tool that will help and calculate the amount of material that you need for your building project.
+
+It will start by having options for Swedish "Altan" and will keep adding things as we go.
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
