@@ -72,7 +72,7 @@ export const FOUNDATION_OPTIONS = [
     materials: [
       'Räkna 1 i varje hörn och 1,5-2m mellan varje plint.'
     ],
-    costPerSt: 800,
+    costPerSt: 356,
   },
   {
     id: 'plint 500',

@@ -11,7 +11,7 @@ const JointsSelector = ({
   return (
     <div className="joints-selection">
       <div className="step-header">
-        <h2>Välj balkar för din {project.name}</h2>
+        <h2>Välj Golvbalkar för din {project.name}</h2>
         <p>Välj balkstorlek baserat på ditt projekt</p>
       </div>
 
@@ -29,10 +29,6 @@ const JointsSelector = ({
               <div className="spec">
                 <span className="spec-label">Styrka:</span>
                 <span className="spec-value">{joint.strength}</span>
-              </div>
-              <div className="spec">
-                <span className="spec-label">Centrumavstånd:</span>
-                <span className="spec-value">{joint.spacing}</span>
               </div>
               <div className="spec">
                 <span className="spec-label">Max spännvidd:</span>

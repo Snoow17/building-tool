@@ -415,6 +415,158 @@ body {
   color: #ffffff;
 }
 
+/* Foundation quantity selector */
+.quantity-selector {
+  background-color: #333333;
+  border: 1px solid #555555;
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.quantity-label {
+  font-weight: 600;
+  color: #ffffff;
+  min-width: 150px;
+}
+
+.quantity-input-group {
+  display: flex;
+  align-items: center;
+  border: 2px solid #666666;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.quantity-btn {
+  background-color: #444444;
+  border: none;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  min-width: 40px;
+}
+
+.quantity-btn:hover:not(:disabled) {
+  background-color: #555555;
+}
+
+.quantity-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.quantity-btn.decrease {
+  border-right: 1px solid #666666;
+}
+
+.quantity-btn.increase {
+  border-left: 1px solid #666666;
+}
+
+.quantity-input {
+  background-color: #222222;
+  border: none;
+  color: #ffffff;
+  padding: 0.75rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  width: 80px;
+  outline: none;
+}
+
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quantity-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.quantity-cost {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.cost-breakdown {
+  background-color: #222222;
+  border: 1px solid #444444;
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cost-breakdown.total-foundation-cost {
+  background-color: #1e40af;
+  border-color: #3b82f6;
+}
+
+.cost-breakdown.total-joints-cost {
+  background-color: #059669;
+  border-color: #10b981;
+}
+
+.cost-label {
+  font-weight: 600;
+  color: #cccccc;
+}
+
+.cost-breakdown.total-foundation-cost .cost-label,
+.cost-breakdown.total-joints-cost .cost-label {
+  color: #ffffff;
+}
+
+.cost-value {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Joints info section */
+.joints-info {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.info-value {
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
 /* Materials summary */
 .materials-summary {
   width: 100%;
@@ -663,6 +815,20 @@ body {
   .project-dropdown {
     font-size: 1rem;
     padding: 0.875rem 1.25rem;
+  }
+  
+  .quantity-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .quantity-cost {
+    grid-template-columns: 1fr;
+  }
+  
+  .joints-info {
+    grid-template-columns: 1fr;
   }
 }
 
