@@ -24,6 +24,16 @@ const JointsSelector = ({
           >
             <h3>{joint.name}</h3>
             <p className="description">{joint.description}</p>
+
+            <img 
+              src={joint.imageUrl} 
+              alt={joint.name}
+              className="joint-image"
+              onError={(e) => {
+                // Fallback image or hide if image fails to load
+                e.target.style.display = 'none';
+              }}
+            />
             
             <div className="joint-specs">
               <div className="spec">

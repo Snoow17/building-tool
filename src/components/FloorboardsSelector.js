@@ -24,6 +24,16 @@ const FloorboardsSelector = ({
           >
             <h3>{floorboard.name}</h3>
             <p className="description">{floorboard.description}</p>
+
+            <img 
+              src={floorboard.imageUrl} 
+              alt={floorboard.name}
+              className="floorboard-image"
+              onError={(e) => {
+                // Fallback image or hide if image fails to load
+                e.target.style.display = 'none';
+              }}
+            />
             
             <div className="floorboard-specs">
               <div className="spec">
