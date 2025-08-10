@@ -25,6 +25,16 @@ const FoundationSelector = ({
             <h3>{foundation.name}</h3>
             <p className="description">{foundation.description}</p>
             <p className="description">{foundation.description2}</p>
+
+            <img 
+              src={foundation.imageUrl} 
+              alt={foundation.name}
+              className="foundation-image"
+              onError={(e) => {
+                // Fallback image or hide if image fails to load
+                e.target.style.display = 'none';
+              }}
+            />
             
             <div className="pros-cons">
               <div className="pros">

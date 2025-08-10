@@ -55,6 +55,7 @@ export const FOUNDATION_OPTIONS = [
     name: 'Marksten (paving stone)',
     description: 'Betongplattor direkt på marken',
     description2: 'Rekommendation är 1 i varje hörn och var annan eller 3:e under',
+    imageUrl: 'https://bolist.se/media/cache/d0b/15f/d0b15fa8493c40cc9f5b13bcd031518f/c0f7f295051cb3deb52509085081aae9/610x610.jpg',
     pros: ['Stabil grund', 'Lång hållbarhet', 'Bra för alla storlekar'],
     cons: ['Kan vara svåra att få raka', 'Tjäle kan vara problem'],
     materials: [
@@ -67,6 +68,7 @@ export const FOUNDATION_OPTIONS = [
     name: 'Plint 300 (Concrete Piers)',
     description: 'Betongplintar som bär upp konstruktionen',
     description2: '1,5 - 2m mellanrum',
+    imageUrl: 'https://www.beijerbygg.se/wcsstore/BeijerCAS/HPMAssets/d220001/derivates/9/001/628/12726437_640px.jpg',
     pros: ['Distans från mark', 'Snabb installation', 'Justerbart järn'],
     cons: ['Kräver frostfri djup', 'Begränsad belastning'],
     materials: [
@@ -79,6 +81,7 @@ export const FOUNDATION_OPTIONS = [
     name: 'Plint 500 (Concrete Piers)',
     description: 'Betongplintar som bär upp konstruktionen',
     description2: '1,5 - 2m mellanrum',
+    imageUrl: 'https://www.beijerbygg.se/wcsstore/BeijerCAS/HPMAssets/d220001/derivates/9/001/969/3410-501600S_p_ps_640px.jpg',
     pros: ['Distans från mark', 'Snabb installation', 'Justerbart järn'],
     cons: ['Kräver frostfri djup', 'Begränsad belastning'],
     materials: [
@@ -91,6 +94,7 @@ export const FOUNDATION_OPTIONS = [
     name: 'Plint 700 (Concrete Piers)',
     description: 'Betongplintar som bär upp konstruktionen',
     description2: '1,5 - 2m mellanrum',
+    imageUrl: 'https://www.beijerbygg.se/wcsstore/BeijerCAS/HPMAssets/d220001/derivates/9/001/969/3410-501600S_p_ps_640px.jpg',
     pros: ['Distans från mark', 'Snabb installation', 'Justerbart järn'],
     cons: ['Kräver frostfri djup', 'Begränsad belastning'],
     materials: [
