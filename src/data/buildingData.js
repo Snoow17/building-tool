@@ -87,6 +87,7 @@ export const JOINT_OPTIONS = [
     spacing: '400mm',
     costPerMeter: 45,
     maxSpan: 2.4,
+    pieceLength: 4.8, // Standard length of each beam piece in meters
     suitableFor: 'Mindre verandor och terrasser'
   },
   {
@@ -98,6 +99,7 @@ export const JOINT_OPTIONS = [
     spacing: '500mm',
     costPerMeter: 58,
     maxSpan: 3.2,
+    pieceLength: 4.8, // Standard length of each beam piece in meters
     suitableFor: 'Medelstora verandor och terrasser'
   },
   {
@@ -109,6 +111,7 @@ export const JOINT_OPTIONS = [
     spacing: '600mm',
     costPerMeter: 72,
     maxSpan: 4.0,
+    pieceLength: 4.8, // Standard length of each beam piece in meters
     suitableFor: 'Stora verandor och terrasser'
   }
 ];
@@ -124,6 +127,7 @@ export const FLOORBOARD_OPTIONS = [
     spacing: '5mm',
     costPerM2: 180,
     metersPerM2: 10.5,
+    pieceLength: 3.6, // Standard length of each board piece in meters
     suitableFor: 'Mindre projekt, klassisk stil'
   },
   {
@@ -135,6 +139,7 @@ export const FLOORBOARD_OPTIONS = [
     spacing: '5mm',
     costPerM2: 220,
     metersPerM2: 8.33,
+    pieceLength: 3.6, // Standard length of each board piece in meters
     suitableFor: 'De flesta verandor och terrasser'
   },
   {
@@ -146,6 +151,7 @@ export const FLOORBOARD_OPTIONS = [
     spacing: '5mm',
     costPerM2: 260,
     metersPerM2: 6.7,
+    pieceLength: 3.6, // Standard length of each board piece in meters
     suitableFor: 'Stora projekt, modern stil'
   },
   {
@@ -157,6 +163,7 @@ export const FLOORBOARD_OPTIONS = [
     spacing: '5mm',
     costPerM2: 320,
     metersPerM2: 6.7,
+    pieceLength: 3.6, // Standard length of each board piece in meters
     suitableFor: 'Högbelastade ytor, lång hållbarhet'
   }
 ]; 

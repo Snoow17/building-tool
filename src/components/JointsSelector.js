@@ -4,7 +4,9 @@ const JointsSelector = ({
   selectedProject, 
   onJointsSelect,
   jointOptions,
-  buildingProjects
+  buildingProjects,
+  customJointLength,
+  onJointLengthChange
 }) => {
   const project = buildingProjects.find(p => p.id === selectedProject);
 
@@ -12,7 +14,7 @@ const JointsSelector = ({
     <div className="joints-selection">
       <div className="step-header">
         <h2>Välj Golvbalkar för din {project.name}</h2>
-        <p>Välj balkstorlek baserat på ditt projekt</p>
+        <p>Välj balkstorlek baserat på ditt projekt, samt ange längden på dina tillgängliga balkar</p>
       </div>
 
       <div className="options-grid">
@@ -47,6 +49,28 @@ const JointsSelector = ({
               <div className="spec">
                 <span className="spec-label">Kostnad per meter:</span>
                 <span className="spec-value">{joint.costPerMeter} SEK</span>
+              </div>
+            </div>
+
+            {/* Joint Length Input for this specific joint */}
+            <div className="card-wood-length-input">
+              <label htmlFor={`joint-length-${joint.id}`} className="card-input-label">
+                Längd på tillgängliga balkar:
+              </label>
+              <div className="card-input-group">
+                <input
+                  type="number"
+                  id={`joint-length-${joint.id}`}
+                  value={customJointLength}
+                  onChange={(e) => onJointLengthChange(e.target.value)}
+                  min="0.1"
+                  max="10"
+                  step="0.1"
+                  placeholder="4.8"
+                  className="card-wood-length-field"
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <span className="card-unit">m</span>
               </div>
             </div>
             

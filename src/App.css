@@ -375,6 +375,52 @@ body {
   margin-bottom: 1.5rem;
 }
 
+/* Card wood length input */
+.card-wood-length-input {
+  background-color: #222222;
+  border: 1px solid #444444;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+.card-input-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.card-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-wood-length-field {
+  width: 80px;
+  padding: 0.5rem;
+  background-color: #333333;
+  border: 1px solid #555555;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.card-wood-length-field:focus {
+  outline: none;
+  border-color: #ffffff;
+  background-color: #444444;
+}
+
+.card-unit {
+  color: #cccccc;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
 /* Floorboard calculation */
 .floorboard-calculation {
   margin-bottom: 1rem;
@@ -382,7 +428,7 @@ body {
 
 .calculation-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
 }
 
@@ -399,6 +445,27 @@ body {
 .calc-item.highlight {
   background-color: #1e40af;
   border-color: #3b82f6;
+}
+
+.calc-item.waste {
+  background-color: #dc2626;
+  border-color: #ef4444;
+}
+
+.calc-item.waste .calc-label {
+  color: #ffffff;
+}
+
+/* Warning message */
+.warning-message {
+  background-color: #fef3c7;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
 }
 
 .calc-label {
@@ -545,7 +612,7 @@ body {
   border-radius: 6px;
   margin-bottom: 1rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
 }
 
@@ -862,6 +929,20 @@ body {
   
   .joints-info {
     grid-template-columns: 1fr;
+  }
+  
+  .card-wood-length-input {
+    padding: 0.75rem;
+  }
+  
+  .card-wood-length-field {
+    width: 70px;
+    padding: 0.4rem;
+    font-size: 0.85rem;
+  }
+  
+  .card-input-label {
+    font-size: 0.85rem;
   }
 }
 

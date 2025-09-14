@@ -26,6 +26,8 @@ function App() {
   const [selectedFoundation, setSelectedFoundation] = useState('');
   const [selectedJoints, setSelectedJoints] = useState('');
   const [selectedFloorboards, setSelectedFloorboards] = useState('');
+  const [customWoodLength, setCustomWoodLength] = useState('3.6');
+  const [customJointLength, setCustomJointLength] = useState('4.8');
 
   // Event handlers
   const handleProjectSelect = (projectId) => {
@@ -54,6 +56,14 @@ function App() {
     setCurrentStep('materials-summary');
   };
 
+  const handleWoodLengthChange = (length) => {
+    setCustomWoodLength(length);
+  };
+
+  const handleJointLengthChange = (length) => {
+    setCustomJointLength(length);
+  };
+
   const handleBackToProjects = () => {
     setCurrentStep('project-selection');
     setSelectedProject('');
@@ -61,6 +71,8 @@ function App() {
     setSelectedFoundation('');
     setSelectedJoints('');
     setSelectedFloorboards('');
+    setCustomWoodLength('3.6');
+    setCustomJointLength('4.8');
   };
 
   const handleBackToSize = () => setCurrentStep('size-selection');
@@ -134,6 +146,8 @@ function App() {
             onJointsSelect={handleJointsSelect}
             jointOptions={JOINT_OPTIONS}
             buildingProjects={BUILDING_PROJECTS}
+            customJointLength={customJointLength}
+            onJointLengthChange={handleJointLengthChange}
           />
         );
 
@@ -144,6 +158,8 @@ function App() {
             onFloorboardsSelect={handleFloorboardsSelect}
             floorboardOptions={FLOORBOARD_OPTIONS}
             buildingProjects={BUILDING_PROJECTS}
+            customWoodLength={customWoodLength}
+            onWoodLengthChange={handleWoodLengthChange}
           />
         );
 
@@ -155,6 +171,8 @@ function App() {
             selectedFoundation={selectedFoundation}
             selectedJoints={selectedJoints}
             selectedFloorboards={selectedFloorboards}
+            customWoodLength={customWoodLength}
+            customJointLength={customJointLength}
             buildingProjects={BUILDING_PROJECTS}
             foundationOptions={FOUNDATION_OPTIONS}
             jointOptions={JOINT_OPTIONS}
