@@ -16,20 +16,18 @@ function MaterialsSummary({
   // Foundation quantity state
   const [foundationQuantity, setFoundationQuantity] = useState(1);
   
-  // Calculate recommended joints based on width (every 60cm) with minimum of 4
-  // Updated calculateRecommendedJoints function (replace the existing one):
-const calculateRecommendedJoints = React.useCallback(() => {
-  if (!projectSize.width || !projectSize.length) return 4;
-  
-  const width = parseFloat(projectSize.width);
-  
-  // Calculate using the same logic as the main calculation
-  const frontBack = 2;
-  const support = Math.max(0, Math.floor(width / 0.6) - 1);
-  const sides = 2;
-  
-  return Math.max(4, frontBack + support + sides);
-}, [projectSize.width, projectSize.length]);
+  // Calculate recommended joints based on the new frame logic
+  const calculateRecommendedJoints = React.useCallback(() => {
+    if (!projectSize.width || !projectSize.length) return 4;
+    
+    const width = parseFloat(projectSize.width);
+    
+    // Use the same calculation as the main function
+    const joistsAcrossWidth = Math.floor(width / 0.6) + 1;
+    const frontBack = 2;
+    
+    return Math.max(4, frontBack + joistsAcrossWidth);
+  }, [projectSize.width, projectSize.length]);
 
   // Joints quantity state - initialize with calculated value
   const [jointsQuantity, setJointsQuantity] = useState(() => calculateRecommendedJoints());
@@ -47,164 +45,178 @@ const calculateRecommendedJoints = React.useCallback(() => {
   const jointLength = parseFloat(customJointLength) || 4.8; // Use custom length or default to 4.8m
 
   const projectWidth = parseFloat(projectSize.width) || 0;
-const projectLength = parseFloat(projectSize.length) || 0;
+  const projectLength = parseFloat(projectSize.length) || 0;
 
-// Advanced floorboard calculations - IMPROVED VERSION
-const calculateFloorboardsNeeded = () => {
-  if (!totalArea || !floorboards) return {
-    totalMetersNeeded: 0,
-    boardLength: 0,
-    numberOfBoardsNeeded: 0,
-    piecesPerWood: 0,
-    woodPiecesToBuy: 0,
-    wastePerPiece: 0,
-    totalWaste: 0,
-    layoutDirection: 'width'
+  // Advanced floorboard calculations - IMPROVED VERSION
+  const calculateFloorboardsNeeded = () => {
+    if (!totalArea || !floorboards) return {
+      totalMetersNeeded: 0,
+      boardLength: 0,
+      numberOfBoardsNeeded: 0,
+      piecesPerWood: 0,
+      woodPiecesToBuy: 0,
+      wastePerPiece: 0,
+      totalWaste: 0,
+      layoutDirection: 'width'
+    };
+
+    // Total linear meters needed based on coverage
+    const totalMetersNeeded = totalArea * floorboards.metersPerM2;
+
+    // Calculate for both directions
+    const widthDirection = calculateDirection(projectWidth, projectLength, totalMetersNeeded, 'width');
+    const lengthDirection = calculateDirection(projectLength, projectWidth, totalMetersNeeded, 'length');
+
+    // Choose direction with less waste
+    return widthDirection.totalWaste <= lengthDirection.totalWaste ? widthDirection : lengthDirection;
   };
 
-  // Total linear meters needed based on coverage
-  const totalMetersNeeded = totalArea * floorboards.metersPerM2;
+  const calculateDirection = (boardLength, projectSpan, totalMetersNeeded, direction) => {
+    // How many boards needed to cover the span (total linear meters divided by board length)
+    const numberOfBoardsNeeded = Math.ceil(totalMetersNeeded / boardLength);
+    
+    // How many pieces can we get from each available wood piece
+    const piecesPerWood = boardLength > 0 ? Math.floor(woodLength / boardLength) : 0;
+    
+    // If board length exceeds available wood, each board needs its own piece
+    const woodPiecesToBuy = piecesPerWood > 0 
+      ? Math.ceil(numberOfBoardsNeeded / piecesPerWood)
+      : numberOfBoardsNeeded;
 
-  // Calculate for both directions
-  const widthDirection = calculateDirection(projectWidth, projectLength, totalMetersNeeded, 'width');
-  const lengthDirection = calculateDirection(projectLength, projectWidth, totalMetersNeeded, 'length');
+    // Calculate waste
+    const wastePerPiece = piecesPerWood > 0 
+      ? woodLength - (piecesPerWood * boardLength)
+      : Math.max(0, woodLength - boardLength);
+    
+    const totalWaste = wastePerPiece * woodPiecesToBuy;
 
-  // Choose direction with less waste
-  return widthDirection.totalWaste <= lengthDirection.totalWaste ? widthDirection : lengthDirection;
-};
-
-const calculateDirection = (boardLength, projectSpan, totalMetersNeeded, direction) => {
-  // How many boards needed to cover the span (total linear meters divided by board length)
-  const numberOfBoardsNeeded = Math.ceil(totalMetersNeeded / boardLength);
-  
-  // How many pieces can we get from each available wood piece
-  const piecesPerWood = boardLength > 0 ? Math.floor(woodLength / boardLength) : 0;
-  
-  // If board length exceeds available wood, each board needs its own piece
-  const woodPiecesToBuy = piecesPerWood > 0 
-    ? Math.ceil(numberOfBoardsNeeded / piecesPerWood)
-    : numberOfBoardsNeeded;
-
-  // Calculate waste
-  const wastePerPiece = piecesPerWood > 0 
-    ? woodLength - (piecesPerWood * boardLength)
-    : Math.max(0, woodLength - boardLength);
-  
-  const totalWaste = wastePerPiece * woodPiecesToBuy;
-
-  return {
-    totalMetersNeeded,
-    boardLength,
-    numberOfBoardsNeeded,
-    piecesPerWood,
-    woodPiecesToBuy,
-    wastePerPiece,
-    totalWaste,
-    layoutDirection: direction
+    return {
+      totalMetersNeeded,
+      boardLength,
+      numberOfBoardsNeeded,
+      piecesPerWood,
+      woodPiecesToBuy,
+      wastePerPiece,
+      totalWaste,
+      layoutDirection: direction
+    };
   };
-};
 
-const floorboardCalc = calculateFloorboardsNeeded();
+  const floorboardCalc = calculateFloorboardsNeeded();
 
-// Update the variables for backward compatibility
-const floorboardPieceLength = floorboardCalc.boardLength;
-const totalFloorboardPiecesNeeded = floorboardCalc.numberOfBoardsNeeded;
-const floorboardsPerWood = floorboardCalc.piecesPerWood;
-const totalWoodPiecesNeeded = floorboardCalc.woodPiecesToBuy;
-const floorboardWastePerWood = floorboardCalc.wastePerPiece;
+  // Update the variables for backward compatibility
+  const floorboardPieceLength = floorboardCalc.boardLength;
+  const totalFloorboardPiecesNeeded = floorboardCalc.numberOfBoardsNeeded;
+  const floorboardsPerWood = floorboardCalc.piecesPerWood;
+  const totalWoodPiecesNeeded = floorboardCalc.woodPiecesToBuy;
+  const floorboardWastePerWood = floorboardCalc.wastePerPiece;
 
-// Advanced joints calculations - IMPROVED VERSION
-const calculateJointsNeeded = () => {
-  if (!projectWidth || !projectLength) return { 
-    frontBack: 0, 
-    support: 0, 
-    sides: 0, 
-    total: 0,
-    frontBackLength: 0,
-    supportLength: 0,
-    sidesLength: 0,
-    totalLength: 0,
-    frontBackPieces: 0,
-    supportPieces: 0,
-    sidePieces: 0,
-    totalPieces: 0
+  // Advanced joints calculations - OPTIMIZED CUTTING
+  const calculateJointsNeeded = () => {
+    if (!projectWidth || !projectLength) return { 
+      perimeterJoists: {
+        frontBack: { count: 0, length: 0, pieces: 0, piecesPerWood: 0, waste: 0 },
+        widthJoists: { count: 0, length: 0, pieces: 0, piecesPerWood: 0, waste: 0 }
+      },
+      totals: { joists: 0, length: 0, pieces: 0, waste: 0 }
+    };
+    
+    // STEP 1: Calculate front and back frame pieces (both same length)
+    const frontBackCount = 2; // front + back
+    const frontBackLength = projectWidth;
+    
+    // How many front/back pieces can we get from one piece of wood?
+    const frontBackPiecesPerWood = Math.floor(jointLength / frontBackLength);
+    const frontBackTotalPieces = frontBackPiecesPerWood > 0 
+      ? Math.ceil(frontBackCount / frontBackPiecesPerWood)
+      : frontBackCount;
+    
+    // Calculate waste for front/back
+    const frontBackWastePerPiece = frontBackPiecesPerWood > 0 
+      ? jointLength - (frontBackPiecesPerWood * frontBackLength)
+      : Math.max(0, jointLength - frontBackLength);
+    const frontBackTotalWaste = frontBackWastePerPiece * frontBackTotalPieces;
+
+    const frontBack = {
+      count: frontBackCount,
+      length: frontBackLength * frontBackCount,
+      pieces: frontBackTotalPieces,
+      piecesPerWood: frontBackPiecesPerWood || 1,
+      waste: frontBackTotalWaste
+    };
+
+    // STEP 2: Calculate joists running across the width (including sides + 60cm spacing)
+    const joistsAcrossWidth = Math.floor(projectWidth / 0.6) + 1;
+    const widthJoistLength = projectLength;
+    
+    // How many width joists can we get from one piece of wood?
+    const widthJoistPiecesPerWood = Math.floor(jointLength / widthJoistLength);
+    const widthJoistTotalPieces = widthJoistPiecesPerWood > 0 
+      ? Math.ceil(joistsAcrossWidth / widthJoistPiecesPerWood)
+      : joistsAcrossWidth;
+    
+    // Calculate waste for width joists
+    const widthJoistWastePerPiece = widthJoistPiecesPerWood > 0 
+      ? jointLength - (widthJoistPiecesPerWood * widthJoistLength)
+      : Math.max(0, jointLength - widthJoistLength);
+    const widthJoistTotalWaste = widthJoistWastePerPiece * widthJoistTotalPieces;
+
+    const widthJoists = {
+      count: joistsAcrossWidth,
+      length: widthJoistLength * joistsAcrossWidth,
+      pieces: widthJoistTotalPieces,
+      piecesPerWood: widthJoistPiecesPerWood || 1,
+      waste: widthJoistTotalWaste
+    };
+
+    // Calculate totals
+    const totalJoists = frontBackCount + joistsAcrossWidth;
+    const totalLength = frontBack.length + widthJoists.length;
+    const totalPieces = frontBack.pieces + widthJoists.pieces;
+    const totalWaste = frontBack.waste + widthJoists.waste;
+
+    return {
+      perimeterJoists: {
+        frontBack,
+        widthJoists
+      },
+      totals: {
+        joists: totalJoists,
+        length: totalLength,
+        pieces: totalPieces,
+        waste: totalWaste
+      }
+    };
   };
-  
-  // 1. Front and back joints - each needs to span the full width
-  const frontBack = 2; // Always need 2 (front + back)
-  const frontBackLength = projectWidth * frontBack;
-  
-  // Calculate how many pieces needed for front/back based on available length
-  const piecesPerFrontBack = Math.ceil(projectWidth / jointLength);
-  const frontBackPieces = piecesPerFrontBack * 2; // 2 edges
-  
-  // 2. Support joints - spaced every 60cm along the width, spanning the length
-  // Don't count the edges (front/back) as they're already included above
-  const numberOfSupportJoints = Math.max(0, Math.floor((projectWidth - 0.6) / 0.6));
-  const supportLength = projectLength * numberOfSupportJoints;
-  
-  // Calculate how many pieces needed for support joints
-  const piecesPerSupport = numberOfSupportJoints > 0 ? Math.ceil(projectLength / jointLength) : 0;
-  const supportPieces = piecesPerSupport * numberOfSupportJoints;
-  
-  // 3. Side joints - left and right edges, each spanning full length
-  const sides = 2;
-  const sidesLength = projectLength * sides;
-  
-  // Calculate how many pieces needed for sides
-  const piecesPerSide = Math.ceil(projectLength / jointLength);
-  const sidePieces = piecesPerSide * 2; // 2 sides
-  
-  const totalLength = frontBackLength + supportLength + sidesLength;
-  const totalPieces = frontBackPieces + supportPieces + sidePieces;
-  
-  return {
-    frontBack,
-    support: numberOfSupportJoints,
-    sides,
-    total: frontBack + numberOfSupportJoints + sides,
-    frontBackLength,
-    supportLength,
-    sidesLength,
-    totalLength,
-    frontBackPieces,
-    supportPieces,
-    sidePieces,
-    totalPieces
-  };
-};
 
-const jointsBreakdown = calculateJointsNeeded();
+  const jointsBreakdown = calculateJointsNeeded();
 
-// Use the actual pieces calculation instead of basic beam count
-const actualBeamsNeeded = jointsBreakdown.totalPieces;
+  // Add safety checks for all calculations
+  const actualBeamsNeeded = jointsBreakdown.totals?.pieces || 0;
+  const totalLengthUsed = jointsBreakdown.totals?.length || 0;
+  const calculatedWaste = jointsBreakdown.totals?.waste || 0;
 
-// Calculate waste more accurately
-const totalLengthUsed = jointsBreakdown.totalLength;
-const totalLengthPurchased = actualBeamsNeeded * jointLength;
-const wasteLength = totalLengthPurchased - totalLengthUsed;
+  // Use the user-selected quantity for cost calculation (allow override)
+  const finalJointsQuantity = Math.max(jointsQuantity, jointsBreakdown.totals?.joists || 0);
 
-// Use the user-selected quantity for cost calculation (allow override)
-const finalJointsQuantity = Math.max(jointsQuantity, jointsBreakdown.total);
+  // Calculate adjustment based on actual needs vs recommendation
+  const adjustmentFactor = (jointsBreakdown.totals?.joists || 0) > 0 ? finalJointsQuantity / (jointsBreakdown.totals?.joists || 1) : 1;
+  const adjustedJointsLength = (jointsBreakdown.totals?.length || 0) * adjustmentFactor;
+  const adjustedBeamsNeeded = Math.ceil(adjustedJointsLength / jointLength);
 
-// Calculate adjustment based on actual needs vs recommendation
-const adjustmentFactor = jointsBreakdown.total > 0 ? finalJointsQuantity / jointsBreakdown.total : 1;
-const adjustedJointsLength = jointsBreakdown.totalLength * adjustmentFactor;
-const adjustedBeamsNeeded = Math.ceil(adjustedJointsLength / jointLength);
+  // Update cost calculation
+  const jointsCostTotal = joints ? joints.costPerMeter * adjustedJointsLength : 0;
 
-// Update cost calculation
-const jointsCostTotal = joints ? joints.costPerMeter * adjustedJointsLength : 0;
+  // Keep these for backward compatibility
+  const totalJointsLength = adjustedJointsLength;
+  const totalJointPiecesNeeded = finalJointsQuantity;
+  const totalBeamPiecesNeeded = adjustedBeamsNeeded;
 
-// Keep these for backward compatibility in the display
-const totalJointsLength = adjustedJointsLength;
-const totalJointPiecesNeeded = finalJointsQuantity;
-const totalBeamPiecesNeeded = adjustedBeamsNeeded;
-
-// For display purposes, calculate individual values
-const widthJoints = jointsBreakdown.support;
-const lengthJoints = jointsBreakdown.sides;
-const frontBackJoints = jointsBreakdown.frontBack;
-  
+  // For display purposes - with safety checks
+  const widthJoints = jointsBreakdown.perimeterJoists?.widthJoists?.count || 0;
+  const lengthJoints = 2; // front + back
+  const frontBackJoints = 2;
+    
   // Calculate costs with adjustable quantities
   const foundationCostPerUnit = foundation ? foundation.costPerSt : 0;
   const foundationTotalCost = foundationCostPerUnit * foundationQuantity;
@@ -319,77 +331,43 @@ const frontBackJoints = jointsBreakdown.frontBack;
             )}
             <div className="quantity-selector">
               <div className="joints-info">
-            <div className="info-item">
-              <span className="info-label">Kantbalkar (fram/bak):</span>
-              <span className="info-value">{jointsBreakdown.frontBack} st × {projectWidth.toFixed(1)}m = {jointsBreakdown.frontBackPieces} träbitar</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Stödbalkar (60cm c/c):</span>
-              <span className="info-value">{jointsBreakdown.support} st × {projectLength.toFixed(1)}m = {jointsBreakdown.supportPieces} träbitar</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Sidbalkar (vänster/höger):</span>
-              <span className="info-value">{jointsBreakdown.sides} st × {projectLength.toFixed(1)}m = {jointsBreakdown.sidePieces} träbitar</span>
-            </div>
-            <div className="info-item highlight">
-              <span className="info-label">Rekommenderat antal balkar:</span>
-              <span className="info-value">{jointsBreakdown.total} st</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Valt antal balkar:</span>
-              <span className="info-value">{finalJointsQuantity} st</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Total längd behövs:</span>
-              <span className="info-value">{adjustedJointsLength.toFixed(1)} m</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Tillgänglig längd per trä:</span>
-              <span className="info-value">{jointLength} m</span>
-            </div>
-            <div className="info-item highlight">
-              <span className="info-label">Träbitar att köpa:</span>
-              <span className="info-value">{totalBeamPiecesNeeded} st</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Beräknat på verkliga mått:</span>
-              <span className="info-value">{actualBeamsNeeded} st (utan justering)</span>
-            </div>
-            <div className="info-item waste">
-              <span className="info-label">Spill:</span>
-              <span className="info-value">{wasteLength > 0 ? wasteLength.toFixed(1) + ' m' : 'Ingen'}</span>
-            </div>
-            {(projectLength > jointLength || projectWidth > jointLength) && (
-              <div className="info-item warning">
-                <span className="info-label">⚠️ Varning:</span>
-                <span className="info-value">Vissa balkar behöver delas/skarvs</span>
-              </div>
-            )}
-          </div>
-              <div className="quantity-controls">
-                <label className="quantity-label">Antal balkar:</label>
-                <div className="quantity-input-group">
-                  <button 
-                    className="quantity-btn decrease" 
-                    onClick={decreaseJoints}
-                    disabled={jointsQuantity <= 4}
-                  >
-                    −
-                  </button>
-                  <input 
-                    type="number" 
-                    className="quantity-input"
-                    value={jointsQuantity}
-                    onChange={handleJointsInputChange}
-                    min="4"
-                  />
-                  <button 
-                    className="quantity-btn increase" 
-                    onClick={increaseJoints}
-                  >
-                    +
-                  </button>
+                <div className="info-item">
+                  <span className="info-label">Ramverk - Fram/Bak:</span>
+                  <span className="info-value">
+                    2 st × {projectWidth.toFixed(1)}m = {
+                      (jointsBreakdown.perimeterJoists?.front?.pieces || 0) + 
+                      (jointsBreakdown.perimeterJoists?.back?.pieces || 0)
+                    } träbitar
+                  </span>
                 </div>
+                <div className="info-item">
+                  <span className="info-label">Balkar tvärs projektet (60cm c/c inkl. sidor):</span>
+                  <span className="info-value">
+                    {jointsBreakdown.perimeterJoists?.widthJoists?.count || 0} st × {projectLength.toFixed(1)}m = {jointsBreakdown.perimeterJoists?.widthJoists?.pieces || 0} träbitar
+                  </span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Total längd behövs:</span>
+                  <span className="info-value">{adjustedJointsLength.toFixed(1)} m</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Tillgänglig längd per trä:</span>
+                  <span className="info-value">{jointLength} m</span>
+                </div>
+                <div className="info-item highlight">
+                  <span className="info-label">Träbitar att köpa:</span>
+                  <span className="info-value">{totalBeamPiecesNeeded} st</span>
+                </div>
+                <div className="info-item waste">
+                  <span className="info-label">Totalt spill:</span>
+                  <span className="info-value">{calculatedWaste > 0 ? calculatedWaste.toFixed(1) + ' m' : 'Ingen'}</span>
+                </div>
+                {(projectLength > jointLength || projectWidth > jointLength) && (
+                  <div className="info-item warning">
+                    <span className="info-label">⚠️ Varning:</span>
+                    <span className="info-value">Vissa balkar behöver skarvs</span>
+                  </div>
+                )}
               </div>
               <div className="quantity-cost">
                 <div className="cost-breakdown">
@@ -409,75 +387,75 @@ const frontBackJoints = jointsBreakdown.frontBack;
           </div>
         )}
 
-                    {/* Floorboard Calculation */}
-            {floorboards && (
-              <div className="materials-section">
-                <h4>Golvbrädor - {floorboards.name}</h4>
-                {floorboardCalc.boardLength > woodLength && (
-                  <div className="warning-message">
-                    ⚠️ Projektet kräver längre brädor än tillgängligt ({floorboardCalc.boardLength.toFixed(1)}m behövs, {woodLength}m tillgängligt).
-                  </div>
-                )}
-                <div className="floorboard-calculation">
-                  <div className="calculation-grid">
-                    <div className="calc-item">
-                      <span className="calc-label">Total yta:</span>
-                      <span className="calc-value">{totalArea.toFixed(1)} m²</span>
-                    </div>
-                    <div className="calc-item">
-                      <span className="calc-label">Meter per m²:</span>
-                      <span className="calc-value">{floorboards.metersPerM2} m</span>
-                    </div>
-                    <div className="calc-item">
-                      <span className="calc-label">Optimal riktning:</span>
-                      <span className="calc-value">
-                        {floorboardCalc.layoutDirection === 'width' ? 'Tvärs projektet' : 'Längs projektet'}
-                      </span>
-                    </div>
-                    <div className="calc-item">
-                      <span className="calc-label">Längd per bräda:</span>
-                      <span className="calc-value">{floorboardCalc.boardLength.toFixed(1)} m</span>
-                    </div>
-                    <div className="calc-item">
-                      <span className="calc-label">Tillgänglig trälängd:</span>
-                      <span className="calc-value">{woodLength} m</span>
-                    </div>
-                    <div className="calc-item highlight">
-                      <span className="calc-label">Totalt behov (löpmeter):</span>
-                      <span className="calc-value">{floorboardCalc.totalMetersNeeded.toFixed(1)} m</span>
-                    </div>
-                    <div className="calc-item highlight">
-                      <span className="calc-label">Antal brädor behövs:</span>
-                      <span className="calc-value">{floorboardCalc.numberOfBoardsNeeded} st</span>
-                    </div>
-                    <div className="calc-item">
-                      <span className="calc-label">Brädor per träbit:</span>
-                      <span className="calc-value">
-                        {floorboardCalc.piecesPerWood > 0 
-                          ? `${floorboardCalc.piecesPerWood} st` 
-                          : '1 st (kräver delning/skarv)'}
-                      </span>
-                    </div>
-                    <div className="calc-item highlight">
-                      <span className="calc-label">Träbitar att köpa:</span>
-                      <span className="calc-value">{floorboardCalc.woodPiecesToBuy} st</span>
-                    </div>
-                    <div className="calc-item waste">
-                      <span className="calc-label">Spill per träbit:</span>
-                      <span className="calc-value">{floorboardCalc.wastePerPiece.toFixed(1)} m</span>
-                    </div>
-                    <div className="calc-item waste">
-                      <span className="calc-label">Totalt spill:</span>
-                      <span className="calc-value">{floorboardCalc.totalWaste.toFixed(1)} m</span>
-                    </div>
-                    <div className="calc-item">
-                      <span className="calc-label">Kostnad:</span>
-                      <span className="calc-value">{floorboardCost.toFixed(0)} kr</span>
-                    </div>
-                  </div>
-                </div>
+        {/* Floorboard Calculation */}
+        {floorboards && (
+          <div className="materials-section">
+            <h4>Golvbrädor - {floorboards.name}</h4>
+            {floorboardCalc.boardLength > woodLength && (
+              <div className="warning-message">
+                ⚠️ Projektet kräver längre brädor än tillgängligt ({floorboardCalc.boardLength.toFixed(1)}m behövs, {woodLength}m tillgängligt).
               </div>
             )}
+            <div className="floorboard-calculation">
+              <div className="calculation-grid">
+                <div className="calc-item">
+                  <span className="calc-label">Total yta:</span>
+                  <span className="calc-value">{totalArea.toFixed(1)} m²</span>
+                </div>
+                <div className="calc-item">
+                  <span className="calc-label">Meter per m²:</span>
+                  <span className="calc-value">{floorboards.metersPerM2} m</span>
+                </div>
+                <div className="calc-item">
+                  <span className="calc-label">Optimal riktning:</span>
+                  <span className="calc-value">
+                    {floorboardCalc.layoutDirection === 'width' ? 'Tvärs projektet' : 'Längs projektet'}
+                  </span>
+                </div>
+                <div className="calc-item">
+                  <span className="calc-label">Längd per bräda:</span>
+                  <span className="calc-value">{floorboardCalc.boardLength.toFixed(1)} m</span>
+                </div>
+                <div className="calc-item">
+                  <span className="calc-label">Tillgänglig trälängd:</span>
+                  <span className="calc-value">{woodLength} m</span>
+                </div>
+                <div className="calc-item highlight">
+                  <span className="calc-label">Totalt behov (löpmeter):</span>
+                  <span className="calc-value">{floorboardCalc.totalMetersNeeded.toFixed(1)} m</span>
+                </div>
+                <div className="calc-item highlight">
+                  <span className="calc-label">Antal brädor behövs:</span>
+                  <span className="calc-value">{floorboardCalc.numberOfBoardsNeeded} st</span>
+                </div>
+                <div className="calc-item">
+                  <span className="calc-label">Brädor per träbit:</span>
+                  <span className="calc-value">
+                    {floorboardCalc.piecesPerWood > 0 
+                      ? `${floorboardCalc.piecesPerWood} st` 
+                      : '1 st (kräver delning/skarv)'}
+                  </span>
+                </div>
+                <div className="calc-item highlight">
+                  <span className="calc-label">Träbitar att köpa:</span>
+                  <span className="calc-value">{floorboardCalc.woodPiecesToBuy} st</span>
+                </div>
+                <div className="calc-item waste">
+                  <span className="calc-label">Spill per träbit:</span>
+                  <span className="calc-value">{floorboardCalc.wastePerPiece.toFixed(1)} m</span>
+                </div>
+                <div className="calc-item waste">
+                  <span className="calc-label">Totalt spill:</span>
+                  <span className="calc-value">{floorboardCalc.totalWaste.toFixed(1)} m</span>
+                </div>
+                <div className="calc-item">
+                  <span className="calc-label">Kostnad:</span>
+                  <span className="calc-value">{floorboardCost.toFixed(0)} kr</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Materials List */}
         <div className="materials-list">
@@ -503,10 +481,6 @@ const frontBackJoints = jointsBreakdown.frontBack;
                 <li>Dimension: {joints.name}</li>
                 <li>Hållfasthet: {joints.strength}</li>
                 <li>Max spännvidd: {joints.maxSpan}m</li>
-                <li>Balkar längs bredden: {widthJoints} st</li>
-                <li>Balkar längs längden: {lengthJoints} st</li>
-                <li>Balkar fram/bak: {frontBackJoints} st</li>
-                <li><strong>Total balkar: {totalJointPiecesNeeded} st</strong></li>
                 <li><strong>Trä att köpa: {totalBeamPiecesNeeded} st</strong></li>
                 <li><strong>Total kostnad: {jointsCostTotal.toFixed(0)} kr</strong></li>
               </ul>
